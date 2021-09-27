@@ -1,0 +1,28 @@
+@import '~@angular/material/theming';
+
+@import './palettes/trilogy.primary';
+@import './palettes/trilogy.secondary';
+
+// Import custom layout styles and style overrides
+@import './layout/trilogy.layout';
+
+// Import custom component styles and style overrides
+@import './components/trilogy.mat-form-field';
+@import './components/trilogy.mat-toolbar';
+
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+$trilogy-primary: mat-palette($trilogy-primary, 700, 500, 900);
+$trilogy-accent:  mat-palette($mat-pink, 700, 500, 900);
+$trilogy-warn:    mat-palette($mat-red);
+
+$trilogy-theme: mat-light-theme((
+  color: (
+    primary: $trilogy-primary,
+    accent: $trilogy-accent,
+    warn: $trilogy-warn,  
+  )
+));
+
+@include angular-material-theme($trilogy-theme);

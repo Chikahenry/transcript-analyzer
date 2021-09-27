@@ -1,0 +1,86 @@
+<ng-template #subHeader>
+  <div class="flex">
+      <div class="selects">
+          <mat-form-field appearance="fill">
+              <mat-label>Agent</mat-label>
+              <mat-select [formControl]="agentControl">
+                  <mat-option *ngFor="let agent of agents.agents$ | async" [value]="agent.id">{{ agent.fullName }}</mat-option>
+              </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+              <mat-label>Call</mat-label>
+              <mat-select [formControl]="callControl">
+                  <mat-option *ngFor="let call of calls.activeAgentCalls$ | async" [value]="call.id">{{call.startTime | date: "dd/MM/yyyy" }} -
+                      {{ call?.customer?.speakerName }} </mat-option>
+              </mat-select>
+          </mat-form-field>
+      </div>
+      <div *ngIf="calls.activeTranscript$ | async" class="matcher">
+          <span>MATCHING SENSITIVITY</span>
+          <mat-slider [max]="100" [min]="0" [step]="1" [formControl]="matchingPercentageControl"></mat-slider>
+          <span>{{ matchingPercentageControl.value }}%</span>
+      </div>
+  </div>
+</ng-template>
+
+<section *ngIf="calls.activeTranscript$ | async as call; else emptyState" class="content">
+  <div class="card">
+      <h1>
+          <strong>Real</strong>
+          <span>Matching: {{ calls.matchingPercentage$ | async }}%</span>
+      </h1>
+      <table width="100%">
+          <thead>
+              <th>Time</th>
+              <th>Speaker</th>
+              <th>Sentence</th>
+          </thead>
+          <tbody>
+              <tr *ngFor="let transcript of call.transcript">
+                  <td>{{ secondsToTime(transcript.timeFrom) }}</td>
+                  <td>{{ getSpeaker(call, transcript.channel) }}</td>
+                  <td [class.heighlight]="(transcript.similarity || 0) * 100 > matchingPercentageControl.value"
+                      [matTooltip]="getTooltip(transcript, call.script).tooltip"
+                      (mouseover)="currentOrderHover = getTooltip(transcript, call.script).order"
+                      (mouseout)="currentOrderHover = null">
+                      {{ transcript.sentence }}
+                  </td>
+              </tr>
+          </tbody>
+      </table>
+  </div>
+
+  <div class="card">
+      <h1>
+          <strong>Expected</strong>
+          <span>Percent of script covered: {{ getPercentageCovered(call.script) }}</span>
+      </h1>
+      <table width="100%">
+          <thead>
+              <th>Line</th>
+              <th>Speaker</th>
+              <th>Sentence</th>
+          </thead>
+          <tbody>
+              <tr *ngFor="let script of call.script">
+                  <td>{{ script.order + 1 }}</td>
+                  <td>Rep:</td>
+                  <td [class.heighlight]="script.similarity || 0 > 0" [class.extraheighlight]="currentOrderHover === script.order">
+                      {{ script.sentence }}
+                  </td>
+              </tr>
+          </tbody>
+      </table>
+  </div>
+</section>
+
+<ng-template #emptyState>
+  <section class="empty-state">
+      <div class="empty-text">
+          <img src="../../../../assets/img/no-selection.svg" >
+          <h2>Selection Pending</h2>
+          <p>Select a call from top menu and a transcript will be shown here</p>
+      </div>
+  </section>
+</ng-template>

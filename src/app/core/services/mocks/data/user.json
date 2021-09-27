@@ -1,0 +1,10 @@
+{
+    "firstName": "Harvey",
+    "lastName": "Pekar",
+    "email": "harvey.pekar@crossover.com",
+    "avatar": {
+        "34": "/assets/img/avatar/hp-34",
+        "48": "/assets/img/avatar/hp-48",
+        "64": "/assets/img/avatar/hp-64"
+    }
+}

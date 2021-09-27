@@ -1,0 +1,11 @@
+$mat-form-field-bg: rgba(#333, .06) !default;
+$mat-form-field-radius: 4px !default;
+
+mat-form-field {
+    &[floatLabel=never] {
+
+        &:not(:last-child) {
+            margin-right: 16px;
+        }
+    }
+}
