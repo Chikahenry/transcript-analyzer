@@ -1,88 +1,92 @@
 .flex {
-  display:         flex;
-  justify-content: space-between;
+	display: flex;
+	justify-content: space-between;
 
-  .selects {
-    display: flex;
-    gap:     1.5rem;
+	.selects {
+		display: flex;
+		gap: 1.5rem;
 
-    label {
-      margin-right: .5rem;
-    }
-  }
+		label {
+			margin-right: 0.5rem;
+		}
+	}
 
-  .matcher {
-    align-items: center;
-    display: flex;
-    gap: .5rem;
-  }
+	.matcher {
+		align-items: center;
+		display: flex;
+		gap: 0.5rem;
+	}
 }
 
 .content {
-  display: flex;
-  gap:     1.5rem;
+	display: flex;
+	gap: 1.5rem;
 
-  .card {
-    box-shadow: 0 3px 3px rgba(0, 0, 0, .2);
-    flex-grow:  1;
-    max-width:  calc(50% - 1.5rem);
-    padding:    1.5rem;
+	.card {
+		box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+		flex-grow: 1;
+		max-width: calc(50% - 1.5rem);
+		padding: 1.5rem;
 
-    h1 {
-      background-color: #EFEFF1;
-      border-bottom:    1px solid rgba(0, 0, 0, .12);
-      display:          flex;
-      justify-content:  space-between;
-      margin:           -1.5rem -1.5rem 1rem;
-      padding:          .5rem 1rem;
+		h1 {
+			background-color: #efeff1;
+			border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+			display: flex;
+			justify-content: space-between;
+			margin: -1.5rem -1.5rem 1rem;
+			padding: 0.5rem 1rem;
 
-      span {
-        font-weight: 300;
-      }
-    }
+			span {
+				font-weight: 300;
+			}
+		}
 
-    table {
-      display: block;
-    }
+		table {
+			display: block;
+		}
 
-    tbody {
-      overflow-y: scroll;
-      height: 60vh;
-      display: block;
-    }
+		tbody {
+			overflow-y: scroll;
+			height: 60vh;
+			display: block;
+		}
 
-    th {
-      text-align: left;
-    }
+		th {
+			text-align: left;
+		}
 
-    th, td {
-      padding: 0.4rem 0.5rem;
-    }
+		th,
+		td {
+			padding: 0.4rem 0.5rem;
+		}
 
-    .heighlight {
-      background: #ccc;
-    }
+		.heighlight {
+			background: #ccc;
+		}
+		.heighlight:hover {
+			cursor: pointer;
+		}
 
-    .extraheighlight {
-      background: #aaa;
-    }
-  }
+		.extraheighlight {
+			background: #aaa;
+		}
+	}
 }
 
-.empty-state {
-  display: flex;
-  justify-content: center;
-  padding: 4rem;;
+.init-state {
+	display: flex;
+	justify-content: center;
+	padding: 4rem;
 
-  .empty-text {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-    width: 350px;
+	.init-text {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		text-align: center;
+		width: 360px;
 
-    p {
-      line-height: 20pt;
-    }
-  }
+		p {
+			line-height: 20pt;
+		}
+	}
 }

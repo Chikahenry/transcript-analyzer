@@ -18,13 +18,13 @@
       </div>
       <div *ngIf="calls.activeTranscript$ | async" class="matcher">
           <span>MATCHING SENSITIVITY</span>
-          <mat-slider [max]="100" [min]="0" [step]="1" [formControl]="matchingPercentageControl"></mat-slider>
-          <span>{{ matchingPercentageControl.value }}%</span>
+          <mat-slider [max]="100" [min]="0" [step]="1" [formControl]="matchingPercentage"></mat-slider>
+          <span>{{ matchingPercentage.value }}%</span>
       </div>
   </div>
 </ng-template>
 
-<section *ngIf="calls.activeTranscript$ | async as call; else emptyState" class="content">
+<section *ngIf="calls.activeTranscript$ | async as call; else emptyTranscript" class="content">
   <div class="card">
       <h1>
           <strong>Real</strong>
@@ -40,10 +40,11 @@
               <tr *ngFor="let transcript of call.transcript">
                   <td>{{ secondsToTime(transcript.timeFrom) }}</td>
                   <td>{{ getSpeaker(call, transcript.channel) }}</td>
-                  <td [class.heighlight]="(transcript.similarity || 0) * 100 > matchingPercentageControl.value"
-                      [matTooltip]="getTooltip(transcript, call.script).tooltip"
-                      (mouseover)="currentOrderHover = getTooltip(transcript, call.script).order"
-                      (mouseout)="currentOrderHover = null">
+                  <td [class.heighlight]="(transcript.similarity || 0) * 100 > matchingPercentage.value"
+                      (mouseover)="currentOrderHover = toggleTooltipData(transcript, call.script).order"
+                      (mouseout)="currentOrderHover = null"
+                      [matTooltip]="toggleTooltipData(transcript, call.script).tooltip"
+                      >
                       {{ transcript.sentence }}
                   </td>
               </tr>
@@ -54,7 +55,7 @@
   <div class="card">
       <h1>
           <strong>Expected</strong>
-          <span>Percent of script covered: {{ getPercentageCovered(call.script) }}</span>
+          <span>Percent of script covered: {{ percentageCovered(call.script) }}</span>
       </h1>
       <table width="100%">
           <thead>
@@ -75,9 +76,9 @@
   </div>
 </section>
 
-<ng-template #emptyState>
-  <section class="empty-state">
-      <div class="empty-text">
+<ng-template #emptyTranscript>
+  <section class="init-state">
+      <div class="init-text">
           <img src="../../../../assets/img/no-selection.svg" >
           <h2>Selection Pending</h2>
           <p>Select a call from top menu and a transcript will be shown here</p>

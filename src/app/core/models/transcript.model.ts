@@ -33,6 +33,15 @@ export default class Transcript {
     this.transcript = [];
     this.type       = null;
   }
+  
+  getSpeakerFirstName (channel: number): string | null {
+    const name = this.getSpeaker(channel);
+    if (name) {
+      return name.split(' ')[0];
+    }
+
+    return 'Unknown';
+  }
 
   getSpeaker (channel: number): string | null {
     if (channel === this.agent?.channel) {
@@ -44,12 +53,4 @@ export default class Transcript {
     return 'Unknown';
   }
 
-  getSpeakerFirstName (channel: number): string | null {
-    const name = this.getSpeaker(channel);
-    if (name) {
-      return name.split(' ')[0];
-    }
-
-    return 'Unknown';
-  }
 }

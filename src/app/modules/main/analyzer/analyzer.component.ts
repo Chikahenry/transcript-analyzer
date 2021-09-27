@@ -21,10 +21,10 @@ export default class AnalyzerComponent implements OnInit, AfterViewInit {
     public currentOrderHover: number | null = null;
     public dataSource: any[] = [];
     public dataSourceRep: any[] = [];
-    public matchingPercentageControl: FormControl;
+    public matchingPercentage: FormControl;
 
     private defaultSensitivity = 38;
-    private lastName: string | null = null;
+    private lastname: string | null = null;
     @ViewChild('subHeader')
     private subHeader?: TemplateRef<any>;
 
@@ -36,7 +36,7 @@ export default class AnalyzerComponent implements OnInit, AfterViewInit {
     ) {
         this.agentControl = new FormControl();
         this.callControl = new FormControl();
-        this.matchingPercentageControl = new FormControl();
+        this.matchingPercentage = new FormControl();
 
         this.agentControl.valueChanges.subscribe({
             next: (agent) => this.selectAgent(agent)
@@ -44,41 +44,11 @@ export default class AnalyzerComponent implements OnInit, AfterViewInit {
         this.callControl.valueChanges.subscribe({
             next: (call) => this.selectCall(call)
         });
-        this.matchingPercentageControl.valueChanges.subscribe({
+        this.matchingPercentage.valueChanges.subscribe({
             next: (matchingPercentage) => this.calls.setMatchingPercentage(matchingPercentage)
         });
 
-        this.matchingPercentageControl.setValue(this.defaultSensitivity);
-    }
-
-    public getPercentageCovered (scripts: Script[]): string {
-        let covered = scripts.filter(script => script.similarity && script.similarity > 0).length;
-        return `${((covered / scripts.length) * 100).toFixed(0)}%`;
-    }
-
-    public getSpeaker (call: Transcript, channel: number): string | null {
-        const name = call.getSpeakerFirstName(channel);
-        if (this.lastName != name) {
-            this.lastName = name;
-            return name;
-        }
-
-        return null;
-    }
-
-    public getTooltip (transcript: any, scripts: Script[]): any {
-        let tooltip = '';
-        let order = null;
-        const matchingScript = scripts.findIndex((script) => script.sentence === transcript.matching_sentence);
-        if (matchingScript !== -1) {
-            tooltip = `${transcript.similarity * 100}% matching with line ${scripts[matchingScript].order + 1} "${scripts[matchingScript].sentence}"`;
-            order = scripts[matchingScript].order;
-        }
-
-        return {
-            tooltip,
-            order
-        };
+        this.matchingPercentage.setValue(this.defaultSensitivity);
     }
 
     public ngAfterViewInit(): void {
@@ -90,11 +60,38 @@ export default class AnalyzerComponent implements OnInit, AfterViewInit {
         this.dataSourceRep = MOCK_DATA().slice(-25);
     }
 
-    public secondsToTime (value: any): string {
-        const minutes = Math.floor(value % 3600 / 60).toString().padStart(2,'0');
-        const seconds = Math.floor(value % 60).toString().padStart(2,'0');
-        
-        return `${minutes}:${seconds}`;
+    public percentageCovered (scripts: Script[]): string {
+        let percent = scripts.filter(script => script.similarity && script.similarity > 0).length;
+        return `${((percent / scripts.length) * 100).toFixed(0)}%`;
+    }
+
+    public getSpeaker (call: Transcript, channel: number): string | null {
+        const name = call.getSpeakerFirstName(channel);
+        if (this.lastname != name) {
+            this.lastname = name;
+            return name;
+        }
+
+        return null;
+    }
+
+    public toggleTooltipData (transcript: any, scripts: Script[]): any {
+        let tooltip = '';
+        let order = null;
+        const matchingScript = scripts.findIndex((script) => script.sentence === transcript.matching_sentence);
+        if (matchingScript !== -1) {
+            order = scripts[matchingScript].order;
+            tooltip = `${transcript.similarity * 100}% matching with line 
+            ${scripts[matchingScript].order + 1} "${scripts[matchingScript].sentence}"`;
+        }else {
+            tooltip = " No matching sentence ";
+            order = null;
+        }
+
+        return {
+            tooltip,
+            order
+        };
     }
 
     public selectAgent(agentId: any): void {
@@ -104,6 +101,14 @@ export default class AnalyzerComponent implements OnInit, AfterViewInit {
     public selectCall(callId: any): void {
         this.calls.selectCall(callId);
     }
+
+    public secondsToTime (value: any): string {
+        const minutes = Math.floor(value % 3600 / 60).toString().padStart(2,'0');
+        const seconds = Math.floor(value % 60).toString().padStart(2,'0');
+        
+        return `${minutes}:${seconds}`;
+    }
+
 }
 
 const MOCK_DATA = () => {
